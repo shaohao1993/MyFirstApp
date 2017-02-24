@@ -2,9 +2,11 @@ package com.niceshao.myfirstapp.util;
 
 import android.text.TextUtils;
 
+import com.google.gson.Gson;
 import com.niceshao.myfirstapp.db.City;
 import com.niceshao.myfirstapp.db.County;
 import com.niceshao.myfirstapp.db.Province;
+import com.niceshao.myfirstapp.gson.Weather;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -86,5 +88,19 @@ public class Utility {
         return false;
     }
 
+    /**
+     * 解析服务器返回的JSON数据为Weather实体类
+     */
+    public static Weather handleWeatherResponse(String response){
+        try {
+            JSONObject jsonObject = new JSONObject(response);
+            JSONArray jsonArray = jsonObject.getJSONArray("HeWeather");
+            String weatherContent = jsonArray.getJSONObject(0).toString();
+            return new Gson().fromJson(weatherContent,Weather.class);
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+        return null;
+    }
 
 }
